@@ -1,0 +1,26 @@
+The SBML version of the model is provided in the file Paenibacillus ICGEB2008 Central Carbon Metabolism.sbml
+
+Scripts to reproduce the figures in the manuscript Adlakha et al, Biotechnol Biofuels, ‘Insight into metabolic pathways of the potential biofuel producer, Paenibacillus polymyxa ICGEB2008’ DOI 10.1186/s13068-015-0338-4 are contained in the folder PlottingScripts
+
+
+
+To run the Scripts you need a working installation of ScrumPy (http://mudshark.brookes.ac.uk/ScrumPy) and the python bindings for CPLEX.
+
+Plotting.py contains the scripts to create all plots, loading the model from the .spy files, setting all constraints etc.
+
+From a Python shell, the command ‘import Plotting’ will automatically execute the scripts. 
+
+The matlab file Plots.m can be used to make nicer plots which resemble those in the manuscript.
+
+
+This software comes without any warranty and the authors will not take any responsibility for any damages caused by this software.
+
+The scripts were tested with Python 2.7, ScrumPy revision 731, Matlab 2014b.
+
+
+This software is published under the GNU General Public License. Cite this work by citing the paper
+
+Adlakha et al, Biotechnol Biofuels (2015), ‘Insight into metabolic pathways of the potential biofuel producer, Paenibacillus polymyxa ICGEB2008’ DOI 10.1186/s13068-015-0338-4
+
+
+

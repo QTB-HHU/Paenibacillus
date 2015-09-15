@@ -1,0 +1,569 @@
+DeQuote()
+Structural()
+ElType(float)
+
+
+
+R_TEC_Pi:
+	x_Pi + 2 "ExtPROTON" -> "Pi" + 2 "PROTON"
+	~
+R_TEC_SULFATE:
+	x_SULFATE + 2 "ExtPROTON" -> "SULFATE" + 2 "PROTON"
+	~
+R_TEC_AMMONIA:
+	x_AMMONIA <> "AMMONIA"
+	~
+R_TEC_NITRATE:
+	x_NITRATE + "ExtPROTON" -> "NITRATE" + 1 "PROTON"
+	~
+
+R_TEC_GLC:
+	x_GLC + 6 "CarbonUptake" -> "GLC"
+	~
+R_TEC_CARBONUPtake:
+	x_CarbonUptake -> "CarbonUptake"
+	~
+R_TEC_CELLOBIOSE:
+	x_CELLOBIOSE + 12 "CarbonUptake" -> "CELLOBIOSE"
+	~
+
+R_TEC_WATER:
+	x_WATER <> "WATER"
+	~
+"R_TEC_XYLOSE":
+	1.0 "x_XYLOSE" + 5 "CarbonUptake" -> "XYLOSE"
+	~
+"R_TEC_GLYCEROL":
+	1.0 "x_GLYCEROL" + 3 "CarbonUptake" -> "GLYCEROL" 
+	~
+
+
+
+"R_TCE_PROTONEFF":
+    "ExtPROTON" <> x_PROTON
+    ~
+
+"R_TCE_CARBON-DIOXIDE":
+	"CARBON-DIOXIDE" -> "x_CARBON-DIOXIDE" + CarbonOutput
+	~
+"R_TCE_ETOH":
+	"ETOH" -> x_ETOH + 2 CarbonOutput
+	~
+"R_TCE_BUTANEDIOL":
+	"BUTANEDIOL" -> x_BUTANEDIOL + 4 CarbonOutput
+	~
+"R_TCE_ACETimp":
+	x_ACET + 2 CarbonOutput -> "ACET" + "PROTON"
+	~
+	
+"R_TCE_ACET":
+	"ACET" + "PROTON" <> x_ACET + "ExtPROTON" +2 CarbonOutput
+	~
+	
+"R_TCE_BiomassCarbOutput":
+    CarbonOutput -> x_CarbonOutput
+    ~
+    
+"R_TCE_BUTANOL":
+	"BUTANOL" -> x_BUTANOL + 4 CarbonOutput
+	~
+"R_TCE_L-LACTATE":
+	"L-LACTATE" + "PROTON" -> x_Lactate + "ExtPROTON" + 3 CarbonOutput
+	~
+"R_TCE_BUTYRIC_ACID":
+	"BUTYRIC_ACID" + "PROTON" -> x_BUTYRIC_ACID + "ExtPROTON"+ 4 CarbonOutput
+	~
+"R_TCE_FORMATE":
+	"FORMATE" + "PROTON" -> x_FORMATE + "ExtPROTON" + CarbonOutput
+	~
+	
+"R_TCE_PROPANE-1-2-DIOL":
+	"PROPANE-1-2-DIOL" -> "x_PROPANE-1-2-DIOL" + 3 CarbonOutput
+	~
+
+"R_TCE_ACETONE":
+    "ACETONE" -> x_ACETONE
+    ~
+R_TCE_NITRITE:
+	"NITRITE" + 1 "PROTON" <> x_NITRITE + "ExtPROTON"
+	~
+
+
+
+"Protein_Production":
+	0.00774944715482 "CYS" + 0.0509454970644 "L-ASPARTATE" + 0.0669493181318 "ILE" + 0.0640549836705 "SER" + 0.0424442425013 "GLN" + 0.0534384953927 "LYS"
+	+ 0.067469752468 "GLT" + 0.039876807796 "PRO" + 0.0557633915695 "THR" + 0.0403097793892 "PHE" + 0.0727206185663 "GLY" + 0.0230572880967 "HIS"
+	+ 0.100597662077 "LEU" + 0.0495522962072 "ARG" + 0.0123173594936 "TRP" + 0.0790768648639 "L-ALPHA-ALANINE" + 0.0714055759049 "VAL" + 0.0388551685209 "ASN"
+	+ 0.0350806239009 "TYR" + 0.0283348272301 "MET" + 0.015424457932591652 "PROTON" -> PROTEIN
+	~
+
+Single_Carbon_PROTEIN_Unit:
+	0.19985720898744908 PROTEIN -> SINGLE_CARBON_PROTEIN
+	~
+
+Biomass_PeptidoGlycan:
+    "PEPTIDOGLYCAN" + 4 "PROTON" -> Biomass_Peptiodoglycan
+    ~
+Single_Carbon_Cell_Wall:
+   1/74 Biomass_Peptiodoglycan ->  SINGLE_CARBON_CELLWALL
+    ~
+Single_Carbon_LIPID_Unit:
+	0.019607843137254902 LIPID -> SINGLE_CARBON_LIPID
+	~
+
+"NucleotideComposition":
+	0.133744050648 "TTP" + 0.103608842459 "CTP" + 0.116255949352 "DGTP" + 0.133744050648 "DATP" + 0.128903056245 "GTP" + 0.130542277523 "UTP" + 0.136945823773 "ATP" + 0.116255949352 "DCTP" + 1 "WATER" + "PROTON"
+	-> 1 "PPI" + "NUCCOMPUNIT"
+	~
+
+Single_Carbon_NUCLEOTIDE_Unit:
+	0.10363131452126256 "NUCCOMPUNIT" -> SINGLE_CARBON_NUCLEOTIDE
+	~
+
+"Biomass":
+    0.598 SINGLE_CARBON_PROTEIN + 0.085 SINGLE_CARBON_LIPID + 0.068 SINGLE_CARBON_NUCLEOTIDE + 0.249 SINGLE_CARBON_CELLWALL -> x_biomass + CarbonOutput
+    ~
+
+"ATPase":
+	1.0 "WATER" + 1.0 "ATP" -> 1.0 "PROTON" + 1.0 "ADP" + 1.0 "Pi"
+	~
+
+"DEHOG":
+    x_C2H2 + "NADH" + "PROTON" <> "NAD" + "WATER" + x_C2H4
+    ~
+
+"E-TransferChain":
+    2 "NADH" + 8 "PROTON" + 2 "NITRATE" + 6 "ADP" + 6 "Pi" -> 6 "ATP" + 8 "WATER" + 2 "NAD" + 2 "NITRITE"
+    ~
+
+
+"FHL-RXN":
+    "FORMATE" + "PROTON" -> "CARBON-DIOXIDE" + "x_HYDROGEN-MOLECULE"
+    ~
+
+##
+# Nitrate to Ammonia conversion
+##
+"NITRATE-REDUCTION-STEP1":
+    4 "NADH" + 5 "PROTON" + "NITRATE" -> "AMMONIA" + 4 "NAD" + 3 "WATER"
+    ~
+    
+# Recycling Batch Reactions
+##
+"5M-THFRecharge":
+    "THF" + "SER" + "NADH" + "PROTON" <> "5-METHYL-THF" + "WATER" + "GLY" + "NAD"
+    ~
+"FORMATETHFLIG-RXN":
+    "THF" + "FORMATE" + "ATP" -> "Pi" + "10-FORMYL-THF" + "ADP"
+    ~
+
+
+"AICAR-RECYCLING":
+        "ATP" + "10-FORMYL-THF" + "AICAR" + "L-ASPARTATE" ->  "AMP" + "ADP" + "Pi" + 2 "PROTON" + "FUM" + "WATER" + "THF"
+        ~
+
+"3-5-ADPRecovery":
+        1.0 "3-5-ADP" + "WATER" -> "AMP" + "Pi"
+        ~
+
+"METHYLENE-THF-Recycling":
+    "SER" + "THF" -> "GLY" + "METHYLENE-THF" + "WATER"
+    ~
+##
+# Amino Acid Batch Reactions
+##
+"GLY-Batch":
+        "SER" + "PROTON" + "AMMONIA" + "NADH" + "CARBON-DIOXIDE" <>  2 "GLY" + "WATER" + "NAD"
+    ~  # REVERSIBLE
+
+"ARG-Batch":
+	1.0 "L-ASPARTATE" + 1.0 "ACETYL-COA" + 1.0 "GLN" + 2.0 "WATER" + 1.0 "HCO3" + 1.0 "NADH" + 4.0 "ATP" + 1.0 "GLT"->1.0 "FUM" + 3.0 "ADP" + 1.0 "PPI" + 4.0 "PROTON" + 3.0 "Pi" + 1.0 "2-KETOGLUTARATE" + 1.0 "ARG" + 1.0 "CO-A" + 1.0 "AMP" + 1.0 "NAD" + 1.0 "ACET"
+	~
+
+"ASN-Batch":
+	1.0 "WATER" + 1.0 "L-ASPARTATE" + 1.0 "ATP" + 1.0 "GLN"->1.0 "AMP" + 1.0 "PPI" + 1.0 "GLT" + 1.0 "ASN" + 1.0 "PROTON"
+	~
+
+"L-ASPARTATE-Batch":
+	1.0 "GLT" + 1.0 "OXALACETIC_ACID"->1.0 "L-ASPARTATE" + 1.0 "2-KETOGLUTARATE"
+	~
+
+"GLT-Batch":
+	1.0 "NADH" + 1.0 "AMMONIA" + 1.0 "2-KETOGLUTARATE" + 2 "PROTON" ->1.0 "WATER" + 1.0 "GLT" + 1.0 "NAD"
+	~
+
+"GLN-Batch":
+	1.0 "GLT" + 1.0 "AMMONIA" + 1.0 "ATP"->1.0 "Pi" + 1.0 "GLN" + 1.0 "ADP"
+	~
+
+"HIS-Batch":
+	3.0 "WATER" + 2.0 "NAD" + 1.0 "PRPP" + 1.0 "GLN" + 1.0 "ATP"->2.0 "NADH" + 2.0 "PPI" + 1.0 "2-KETOGLUTARATE" + 1.0 "HIS" + 5.0 "PROTON" + 1.0 "Pi" + 1.0 "AICAR"
+	~
+
+"PRPP-Batch":
+	1.0 "RIBOSE-5P" + 2.0 "ATP"->1.0 "PROTON" + 2.0 "ADP" + 1.0 "PRPP" 
+	~
+
+"ILE-Batch":
+	3.0 "NADH" + 1.0 "OXALACETIC_ACID" + 1.0 "PYRUVATE" + 2.0 "PROTON"+ 2.0 "ATP" + 2.0 "GLT"->1.0 "ILE" + 3.0 "NAD" + 2.0 "ADP" + 2.0 "2-KETOGLUTARATE" + 2.0 "Pi" + 1.0 "CARBON-DIOXIDE" + 1.0 "AMMONIA"
+	~
+
+"LEU-Batch":
+	2 "PYRUVATE" + 1.0 "PROTON"  + 1.0 "GLT" + 1.0 "ACETYL-COA"-> 1.0 "2-KETOGLUTARATE" + 2.0 "CARBON-DIOXIDE" + 1.0 "CO-A" + 1.0 "LEU"
+	~
+
+"LYS-Batch":
+	1.0 "L-ASPARTATE" + 2.0 "NADH" + 1.0 "SUC-COA" + 1.0 "PYRUVATE" + 2.0 "PROTON"  + 1.0 "ATP" + 1.0 "GLT"->  1.0 "SUC" + 2.0 "NAD" + 1.0 "ADP" + 1.0 "LYS" + 1.0 "2-KETOGLUTARATE" + 1.0 "CARBON-DIOXIDE" + 1.0 "CO-A" + 1.0 "Pi"
+	~
+
+"MET-Batch":
+	6.0 "NADH" + 1.0 "ACETYL-COA" + 1.0 "OXALACETIC_ACID" + 1.0 "SULFATE" + 5.0 "PROTON"   + 1.0 "5-METHYL-THF" + 3.0 "ATP" + 1.0 "GLT"->3.0 "WATER" + 1.0 "Pi" + 6.0 "NAD" + 2.0 "ADP" + 1.0 "PPI" + 1.0 "2-KETOGLUTARATE" + 1.0 "3-5-ADP" + 1.0 "MET" + 1.0 "CO-A" + 1.0 "THF" + 1.0 "ACET"
+	~
+
+"PRO-Batch":
+	2.0 "NADH" + 1.0 "GLT" + 1.0 "ATP" + 2.0 "PROTON"->1.0 "Pi" + 2.0 "NAD" + 1.0 "ADP" + 1.0 "PRO" + 1.0 "WATER"
+	~
+
+"SER-Batch":
+	1.0 "WATER" + 1.0 "G3P" + 1.0 "GLT" + 1.0 "NAD"->1.0 "NADH" + 1.0 "Pi" + 1.0 "2-KETOGLUTARATE" + 1.0 "SER" + 1.0 "PROTON"
+	~
+
+"THR-Batch":
+	2.0 "NADH" + 1.0 "OXALACETIC_ACID" + 1.0 "PROTON" + 1.0 "WATER" + 2.0 "ATP" + 1.0 "GLT"->  2.0 "ADP" + 2.0 "NAD" + 1.0 "THR" + 1.0 "2-KETOGLUTARATE" + 2.0 "Pi"
+	~
+
+"TRP-Batch":
+	1.0 "NADH" + 1.0 "ATP" + 1.0 "GLN" + 2.0 "PHOSPHO-ENOL-PYRUVATE" + 1.0 "ERYTHROSE-4P" + 1.0 "PRPP" + 1.0 "SER"->1.0 "NAD" + 1.0 "ADP" + 1.0 "PPI" + 1.0 "PYRUVATE" + 1.0 "CARBON-DIOXIDE" + 1.0 "GAP" + 2.0 "WATER" + 1.0 "TRP" + 4.0 "Pi" + 1.0 "GLT"
+	~
+
+"TYR-Batch":
+	1.0 "ERYTHROSE-4P" + 2.0 "PHOSPHO-ENOL-PYRUVATE" + 1.0 "GLT" + 1.0 "ATP"->1.0 "TYR" + 4.0 "Pi" + 1.0 "2-KETOGLUTARATE" + 1.0 "ADP" + 1.0 "CARBON-DIOXIDE"
+	~
+
+"VAL-Batch":
+	1.0 "NADH" + 1.0 "GLT" + 2.0 "PYRUVATE" + 2.0 "PROTON"->1.0 "WATER" + 1.0 "CARBON-DIOXIDE" + 1.0 "NAD" + 1.0 "VAL" + 1.0 "2-KETOGLUTARATE"
+	~
+
+"PHE-Batch":
+	1.0 "NADH" + 2.0 "PHOSPHO-ENOL-PYRUVATE" + 1.0 "ERYTHROSE-4P" + 1.0 "PROTON" + 1.0 "ATP" + 1.0 "GLT"->1.0 "NAD" + 1.0 "ADP" + 1.0 "PHE" + 1.0 "CARBON-DIOXIDE" + 1.0 "WATER" + 1.0 "2-KETOGLUTARATE" + 4.0 "Pi"
+	~
+
+"L-ALPHA-ALANINE-Batch":
+	1.0 "PYRUVATE" + 1.0 "GLT"->1.0 "L-ALPHA-ALANINE" + 1.0 "2-KETOGLUTARATE"
+	~
+"CYS-Batch":
+	1.0 "G3P" + 1.0 "ACETYL-COA" + 3.0 "NADH" + 1.0 "SULFATE" + 2.0 "PROTON"  + 2.0 "ATP" + 1.0 "GLT"	-> 1.0 "CYS" + 2.0 "WATER" + 3.0 "NAD" + 1.0 "ADP" + 1.0 "PPI" + 1.0 "2-KETOGLUTARATE" + 1.0 "3-5-ADP" + 1.0 "CO-A" + 1.0 "Pi" +  1.0 "ACET"
+	~
+##
+# DNA/RNA Batch Reactions
+##
+
+"DCTP-Batch":
+    "CTP" + "NADH" + "PROTON" -> "WATER" + "DCTP" + "NAD"
+    ~
+
+"TTP-Batch":
+    "DUTP" + "WATER" + 2 "ATP" + "METHYLENE-THF" + "NADH" -> "THF" + 2 "ADP" + "PPI" + "NAD" + "TTP"
+    ~
+
+"DUTP-Batch":
+    "DCTP" + "WATER" -> "DUTP" + "AMMONIA"
+    ~
+"UTP-Batch":
+	1 "L-ASPARTATE" + 1 "GLN" + 1 "NAD" + 1 "HCO3" + 4 "ATP" + 1 "PRPP"->1 "NADH" + 4 "ADP" + 1 "PPI" + 1 "CARBON-DIOXIDE" + 1 "UTP" + 2 "PROTON" + 2 "Pi" + 1 "GLT"
+	~
+
+"CTP-Batch":
+    "UTP" + "ATP" + "GLN" + "WATER" -> "CTP" + "GLT" + "Pi" + 2 "PROTON" + "ADP"
+    ~
+"IMP-Batch":
+	1 "FORMATE" + 1 "PRPP" + 2 "GLN" + 1 "10-FORMYL-THF" + 1 "WATER" + 1 "GLY" + 1 "L-ASPARTATE" + 6 "ATP" + 1 "HCO3" -> 6 "Pi" + 6 "ADP" + 1 "PPI"  + 7 "PROTON" + 1 "THF" + 1 "FUM" + 2 "GLT" + "IMP"
+	~
+
+"GTP-Batch":
+	1 "WATER" + 1 "IMP" + 1 "NAD" + 3 "ATP" + 1 "AMMONIA" -> 1 "NADH" + 2 "ADP" + 1 "PPI" + 2 "PROTON" + 1 "GTP" + 1 "AMP"
+	~
+
+"ATP-Batch":
+	1 "L-ASPARTATE" + 2 "ATP" + 1 "IMP" -> 1 "FUM" + 1 "Pi" + 2 "PROTON" + 3 "ADP"
+	~
+
+"DATP-Batch":
+    "ATP" + "NADH" + "PROTON" -> "DATP" + "NAD" + "WATER"
+    ~
+"DGTP-Batch":
+    "GTP" + "NADH" + "PROTON" -> "DGTP" + "NAD" + "WATER"
+    ~
+##Fatty Acid Biosynthesis
+
+FAInitiReaction:
+    "MALONYL-ACP" <> FAPart
+    ~
+
+FAInitiation:
+    FAInit + "ACETYL-COA" + "HCO3" + "ATP" -> FAPart + "ADP" + "Pi" + "CO-A"
+    ~
+#Elongation Lump Reaction for many parts.
+#Combines several reactions in several steps which have the same overall Stoichiometry
+#FAElongation is a currency for Fatty Acid generation
+    
+FattyAcidElongation:
+    2 "NADH" + FAPart + 2 "PROTON" -> "WATER" + "CARBON-DIOXIDE" + 2 "NAD"  + FAInit + FAElongation
+    ~
+
+"LIPID-Batch":
+    6 "ACETYL-COA" + 3 "HCO3" + 3 "ATP" + "GLYCEROL-3P" +6 "NADH" + 18 FAElongation + 6 "PROTON"  -> 3 "ADP"+  4 "Pi" + 6 "CO-A" + LIPID  + 3 "CARBON-DIOXIDE" + 6 "NAD" + 2 "WATER"
+    ~
+
+## Cell Wall Batch reactions
+##
+
+"IPP-Batch":
+    "GAP" + "PYRUVATE" + 3 "NADH"  +  3 "PROTON" + 2 "ATP" -> "CARBON-DIOXIDE" + 3 "NAD" + "ADP" + "PPI" + "AMP" +  2 "WATER" + "DELTA3-ISOPENTENYL-PP"
+    ~
+
+"Peptidoglycan-Batch":
+    "WATER" + "FRUCTOSE-6P" + "L-ALPHA-ALANINE" +"PHOSPHO-ENOL-PYRUVATE" + "GLN" +  "ACETYL-COA" + 3 "ATP" + "NADH"  + 11 "DELTA3-ISOPENTENYL-PP" -> 11 "PPI" + "CO-A" + "NAD" + "AMP" + 2 "ADP" + 4 "Pi"   +2 "PROTON" + "PEPTIDOGLYCAN"
+    ~
+
+ 
+"ACETOACETATE-DECARBOXYLASE-RXN":
+    "3-KETOBUTYRATE" + "PROTON" -> "CARBON-DIOXIDE" + "ACETONE"
+    ~
+
+
+"2PGADEHYDRAT-RXN":
+	1.0 "2-PG" <> 1.0 "WATER" + 1.0 "PHOSPHO-ENOL-PYRUVATE"
+	~
+"RXN0-5224":
+	1.0 "HCO3" + 1.0 "PROTON" <> 1.0 "WATER" + 1.0 "CARBON-DIOXIDE"
+	~
+"GLUCOKIN-RXN":
+	1.0 "GLC" + 1.0 "ATP" <> 1.0 "PROTON" + 1.0 "ADP" + 1.0 "GLC-6-P"
+	~
+"SUCCCOASYN-RXN":
+	1.0 "SUC" + 1.0 "ATP" + 1.0 "CO-A" <> 1.0 "SUC-COA" + 1.0 "ADP" + 1.0 "Pi"
+	~
+"RR-BUTANEDIOL-DEHYDROGENASE-RXN":
+	1.0 "NAD" + 1.0 "BUTANEDIOL" <> 1.0 "NADH" + 1.0 "PROTON" + 1.0 "CPD-10353"
+	~
+"ACETALD-DEHYDROG-RXN":
+	1.0 "NAD" + 1.0 "ACETALD" + 1.0 "CO-A" <> 1.0 "ACETYL-COA" + 1.0 "NADH" + 1.0 "PROTON"
+	~
+"RXN-6182":
+	1.0 "ALPHA-GLC-6-P" <> 1.0 "FRUCTOSE-6P"
+	~
+"6PGLUCONOLACT-RXN":
+	1.0 "WATER" + 1.0 "D-6-P-GLUCONO-DELTA-LACTONE" <> 1.0 "CPD-2961" + 1.0 "PROTON"
+	~
+"PEPCARBOX-RXN":
+	1.0 "OXALACETIC_ACID" + 1.0 "Pi" <> 1.0 "HCO3" + 1.0 "PHOSPHO-ENOL-PYRUVATE"
+	~
+"GLY3KIN-RXN":
+	1.0 "GLYCERATE" + 1.0 "ATP" <> 1.0 "PROTON" + 1.0 "ADP" + 1.0 "G3P"
+	~
+"PHOSACETYLTRANS-RXN":
+	1.0 "ACETYL-COA" + 1.0 "Pi" <> 1.0 "ACETYL-P" + 1.0 "CO-A"
+	~
+"FUMHYDR-RXN":
+	1.0 "MAL" <> 1.0 "FUM" + 1.0 "WATER"
+	~
+"DLACTDEHYDROGNAD-RXN":
+	1.0 "NAD" + 1.0 "L-LACTATE" <> 1.0 "PYRUVATE" + 1.0 "NADH" + 1.0 "PROTON"
+	~
+"ACONITATEDEHYDR-RXN":
+	1.0 "CIT" <> 1.0 "CIS-ACONITATE" + 1.0 "WATER"
+	~
+"ENZRXN-161-RXN":
+	1.0 "NAD" + 1.0 "BUTANOL" <> 1.0 "BUTANAL" + 1.0 "NADH" + 1.0 "PROTON"
+	~
+"SUCC-FUM-OXRED-RXN":
+	1.0 "SUC" + 1.0 "NAD" <> 1.0 "FUM" + 1.0 "NADH" + "PROTON"
+	~
+"ADENYL-KIN-RXN":
+	1.0 "ATP" + 1.0 "AMP" <> 2.0 "ADP"
+	~
+"ACETATEKIN-RXN":
+	1.0 "ATP" + 1.0 "ACET" <> 1.0 "ACETYL-P" + 1.0 "ADP"
+	~
+"RXN-8632":
+	1.0 "NAD" + 1.0 "PROPANE-1-2-DIOL" <> 1.0 "ACETOL" + 1.0 "NADH" + 1.0 "PROTON"
+	~
+"GLYCERONE-KINASE-RXN":
+	1.0 "DIHYDROXYACETONE" + 1.0 "ATP" <> 1.0 "DIHYDROXY-ACETONE-PHOSPHATE" + 1.0 "PROTON" + 1.0 "ADP"
+	~
+"PHOSGLYPHOS-RXN":
+	1.0 "ATP" + 1.0 "G3P" <> 1.0 "DPG" + 1.0 "ADP"
+	~
+"GLYCEROL-KIN-RXN":
+	1.0 "GLYCEROL" + 1.0 "ATP" <> 1.0 "GLYCEROL-3P" + 1.0 "PROTON" + 1.0 "ADP"
+	~
+"ISOCITDEH-RXN":
+	1.0 "THREO-DS-ISO-CITRATE" + 1.0 "NAD" <> 1.0 "NADH" + 1.0 "2-KETOGLUTARATE" + 1.0 "CARBON-DIOXIDE"
+	~
+"3-HYDROXYBUTYRYL-COA-DEHYDROGENASE-RXN":
+	1.0 "NAD" + 1.0 "S-3-HYDROXYBUTANOYL-COA" <> 1.0 "NADH" + 1.0 "ACETOACETYL-COA" + 1.0 "PROTON"
+	~
+
+"RIB5PISOM-RXN":
+	1.0 "RIBOSE-5P" <> 1.0 "RIBULOSE-5P"
+	~
+"3PGAREARR-RXN":
+	1.0 "G3P" <> 1.0 "2-PG"
+	~
+"1TRANSKETO-RXN":
+	1.0 "GAP" + 1.0 "D-SEDOHEPTULOSE-7-P" <> 1.0 "XYLULOSE-5-PHOSPHATE" + 1.0 "RIBOSE-5P"
+	~
+"2TRANSKETO-RXN":
+	1.0 "ERYTHROSE-4P" + 1.0 "XYLULOSE-5-PHOSPHATE" <> 1.0 "GAP" + 1.0 "FRUCTOSE-6P"
+	~
+"METHGLYSYN-RXN":
+	1.0 "DIHYDROXY-ACETONE-PHOSPHATE" <> 1.0 "METHYL-GLYOXAL" + 1.0 "Pi"
+	~
+"CITSYN-RXN":
+	1.0 "ACETYL-COA" + 1.0 "WATER" + 1.0 "OXALACETIC_ACID" <> 1.0 "PROTON" + 1.0 "CIT" + 1.0 "CO-A"
+	~
+"FRUCTOKINASE-RXN":
+	1.0 "BETA-D-FRUCTOSE" + 1.0 "ATP" <> 1.0 "PROTON" + 1.0 "ADP" + 1.0 "FRUCTOSE-6P"
+	~
+"ALCOHOL-DEHYDROG-RXN":
+	1.0 "NAD" + 1.0 "ETOH" <> 1.0 "NADH" + 1.0 "PROTON" + 1.0 "ACETALD"
+	~
+"GLU6PDEHYDROG-RXN":
+	1.0 "NAD" + 1.0 "GLC-6-P" <> 1.0 "NADH" + 1.0 "PROTON" + 1.0 "D-6-P-GLUCONO-DELTA-LACTONE"
+	~
+"ACETOLACTSYN-RXN":
+	2.0 "PYRUVATE" + 1.0 "PROTON" <> 1.0 "2-ACETO-LACTATE" + 1.0 "CARBON-DIOXIDE"
+	~
+"2.8.3.9-RXN":
+	1.0 "3-KETOBUTYRATE" + 1.0 "BUTYRYL-COA" <> 1.0 "ACETOACETYL-COA" + 1.0 "BUTYRIC_ACID"
+	~
+"PHOSPHOGLUCMUT-RXN":
+	1.0 "GLC-1-P" <> 1.0 "ALPHA-GLC-6-P"
+	~
+"ACONITATEHYDR-RXN":
+	1.0 "CIS-ACONITATE" + 1.0 "WATER" <> 1.0 "THREO-DS-ISO-CITRATE"
+	~
+"PYRUFLAVREDUCT-RXN":
+	1.0 "PYRUVATE" + 1.0 "NAD" + 1.0 "CO-A" <> 1.0 "ACETYL-COA" + 1.0 "NADH" + 1.0 "CARBON-DIOXIDE"
+	~
+"GLYCDEH-RXN":
+	1.0 "NAD" + 1.0 "GLYCEROL" <> 1.0 "NADH" + 1.0 "PROTON" + 1.0 "DIHYDROXYACETONE"
+	~
+"ACETYL-COA-ACETYLTRANSFER-RXN":
+	2.0 "ACETYL-COA" <> 1.0 "ACETOACETYL-COA" + 1.0 "CO-A"
+	~
+"PYRUVFORMLY-RXN":
+	1.0 "ACETYL-COA" + 1.0 "FORMATE" <> 1.0 "PYRUVATE" + 1.0 "CO-A"
+	~
+"TRIOSEPISOMERIZATION-RXN":
+	1.0 "GAP" <> 1.0 "DIHYDROXY-ACETONE-PHOSPHATE"
+	~
+"RXN0-4281":
+	1.0 "NADH" + 1.0 "PROTON" + 1.0 "METHYL-GLYOXAL" <> 1.0 "ACETOL" + 1.0 "NAD"
+	~
+"RXN-8631":
+	1.0 "FRU1P" <> 1.0 "GLYCERALD" + 1.0 "DIHYDROXY-ACETONE-PHOSPHATE"
+	~
+"F16ALDOLASE-RXN":
+	1.0 "FRUCTOSE-16-DIPHOSPHATE" <> 1.0 "DIHYDROXY-ACETONE-PHOSPHATE" + 1.0 "GAP"
+	~
+"GLUCOSE-6-PHOSPHATE-1-EPIMERASE-RXN":
+	1.0 "ALPHA-GLC-6-P" <> 1.0 "GLC-6-P"
+	~
+"RIBULP3EPIM-RXN":
+	1.0 "RIBULOSE-5P" <> 1.0 "XYLULOSE-5-PHOSPHATE"
+	~
+"TRANSALDOL-RXN":
+	1.0 "GAP" + 1.0 "D-SEDOHEPTULOSE-7-P" <> 1.0 "ERYTHROSE-4P" + 1.0 "FRUCTOSE-6P"
+	~
+"GAPOXNPHOSPHN-RXN":
+	1.0 "NAD" + 1.0 "GAP" + 1.0 "Pi" <> 1.0 "DPG" + 1.0 "NADH" + 1.0 "PROTON"
+	~
+"BUTANAL-DEHYDROGENASE-RXN-(NAD)":
+	1.0 "BUTANAL" + 1.0 "NAD" + 1.0 "CO-A" <> 1.0 "NADH" + 1.0 "BUTYRYL-COA" + 1.0 "PROTON"
+	~
+"ACETOACETYL-COA-TRANSFER-RXN":
+	1.0 "ACETYL-COA" + 1.0 "3-KETOBUTYRATE" <> 1.0 "ACETOACETYL-COA" + 1.0 "ACET"
+	~
+"GLYCERALDEHYDE-DEHYDRO-RXN":
+	1.0 "WATER" + 1.0 "NAD" + 1.0 "GLYCERALD" -> 1.0 "GLYCERATE" + 1.0 "NADH" + 2.0 "PROTON"
+	~
+"GLUCISOM-RXN":
+	1.0 "GLC" <> 1.0 "BETA-D-FRUCTOSE"
+	~
+"ACETOLACTATE-DECARBOXYLASE-RXN":
+	1.0 "2-ACETO-LACTATE" + 1.0 "PROTON" -> 1.0 "CARBON-DIOXIDE" + 1.0 "CPD-10353"
+	~
+"1PFRUCTPHOSN-RXN":
+	1.0 "FRU1P" + 1.0 "ATP" -> 1.0 "FRUCTOSE-16-DIPHOSPHATE" + 1.0 "PROTON" + 1.0 "ADP"
+	~
+"GLYCEROL-DEHYDRATASE-RXN":
+	1.0 "GLYCEROL" -> 1.0 "WATER" + 1.0 "HYDROXYPROPANAL"
+	~
+"RXN-11032":
+	1.0 "DIACETYL" + 1.0 "NADH" + 1.0 "PROTON" -> 1.0 "NAD" + 1.0 "CPD-255"
+	~
+"RXN-3341":
+	1.0 "NAD" + 1.0 "CPD-2961" -> 1.0 "RIBULOSE-5P" + 1.0 "NADH" + 1.0 "CARBON-DIOXIDE"
+	~
+"RXN-12566":
+	1.0 "S-3-HYDROXYBUTANOYL-COA" -> 1.0 "WATER" + 1.0 "CROTONYL-COA"
+	~
+"6PFRUCTPHOS-RXN":
+	1.0 "ATP" + 1.0 "FRUCTOSE-6P" -> 1.0 "FRUCTOSE-16-DIPHOSPHATE" + 1.0 "PROTON" + 1.0 "ADP"
+	~
+"GLYC3PDEHYDROGBIOSYN-RXN":
+	1.0 "DIHYDROXY-ACETONE-PHOSPHATE" + 1.0 "NADH" + 1.0 "PROTON" -> 1.0 "NAD" + 1.0 "GLYCEROL-3P"
+	~
+"RXN-6081":
+	1.0 "2-ACETO-LACTATE" + 1.0 "NAD" -> 1.0 "DIACETYL" + 1.0 "NADH" + 1.0 "CARBON-DIOXIDE"
+	~
+"PEPSYNTH-RXN":
+	1.0 "PYRUVATE" + 1.0 "WATER" + 1.0 "ATP" -> 1.0 "AMP" + 2.0 "PROTON" + 1.0 "PHOSPHO-ENOL-PYRUVATE" + 1.0 "Pi"
+	~
+"2OXOGLUTARATEDEH-RXN":
+	1.0 "NAD" + 1.0 "2-KETOGLUTARATE" + 1.0 "CO-A" -> 1.0 "SUC-COA" + 1.0 "NADH" + 1.0 "CARBON-DIOXIDE"
+	~
+"FRUCTOSE-6-PHOSPHATE-PHOSPHOKETOLASE-RXN":
+	1.0 "FRUCTOSE-6P" + 1.0 "Pi" -> 1.0 "ERYTHROSE-4P" + 1.0 "ACETYL-P" + 1.0 "WATER"
+	~
+"RXN-3443":
+	1.0 "NAD" + 1.0 "WATER" + 1.0 "GAP" -> 1.0 "NADH" + 2.0 "PROTON" + 1.0 "G3P"
+	~
+"PEPDEPHOS-RXN":
+	1.0 "PROTON" + 1.0 "PHOSPHO-ENOL-PYRUVATE" + 1.0 "ADP" -> 1.0 "PYRUVATE" + 1.0 "ATP"
+	~
+"1.1.1.39-RXN":
+	1.0 "NAD" + 1.0 "MAL" -> 1.0 "PYRUVATE" + 1.0 "NADH" + 1.0 "CARBON-DIOXIDE"
+	~
+"RXN-11708":
+	1.0 "NADH" + 1.0 "PROTON" + 1.0 "DIHYDROXYACETONE" -> 1.0 "NAD" + 1.0 "GLYCEROL"
+	~
+"PHOSPHOKETOLASE-RXN":
+	1.0 "XYLULOSE-5-PHOSPHATE" + 1.0 "Pi" -> 1.0 "ACETYL-P" + 1.0 "WATER" + 1.0 "GAP"
+	~
+"CELLOBIOSE-PHOSPHORYLASE-RXN":
+	1.0 "CELLOBIOSE" + 1.0 "Pi" -> 1.0 "GLC-1-P" + 1.0 "GLC"
+	~
+"BUTYRYL-COA-DEHYDROGENASE-RXN":
+	1.0 "NADH" + 1.0 "CROTONYL-COA" + "PROTON" -> 1.0 "BUTYRYL-COA" + 1.0 "NAD"
+	~
+"F16BDEPHOS-RXN":
+	1.0 "WATER" + 1.0 "FRUCTOSE-16-DIPHOSPHATE" -> 1.0 "FRUCTOSE-6P" + 1.0 "Pi"
+	~
+"XYLISOM-RXN":
+	1.0 "XYLOSE" <> 1.0 "D-XYLULOSE"
+	~
+"XYLULOKIN-RXN":
+	1.0 "D-XYLULOSE" + 1.0 "ATP" <> 1.0 "PROTON" + 1.0 "XYLULOSE-5-PHOSPHATE" + 1.0 "ADP"
+	~
+"MALATE-DEH-RXN":
+    "MAL" + "NAD" <> "OXALACETIC_ACID" + "NADH" + "PROTON"
+    ~
+"INORGPYROPHOSPHATE-RXN":
+	"PPI" + "WATER" -> 2 "Pi" + "PROTON"
+	~
+"RXN-6161":
+    "PYRUVATE" + "PROTON" -> "ACETALD" + "CARBON-DIOXIDE"
+    ~
